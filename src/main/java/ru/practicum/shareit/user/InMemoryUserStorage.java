@@ -64,9 +64,6 @@ public class InMemoryUserStorage implements UserStorage {
             }
             userFromStorage.setEmail(user.getEmail());
         }
-        /*if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new ConditionException("Email не должен быть пустым");
-        }*/
         if (user.getName() != null) {
             userFromStorage.setName(user.getName());
         }
