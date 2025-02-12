@@ -1,16 +1,13 @@
 package ru.practicum.shareit.item.model;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Item {
     private int id;
@@ -28,12 +25,4 @@ public class Item {
     private boolean available;
     private User owner;
     private ItemRequest request;
-
-    /*public boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }*/
 }

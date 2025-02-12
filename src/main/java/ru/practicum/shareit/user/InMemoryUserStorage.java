@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.ConditionException;
 import ru.practicum.shareit.exception.DuplicateDataException;
 import ru.practicum.shareit.exception.UserNotFoundException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
