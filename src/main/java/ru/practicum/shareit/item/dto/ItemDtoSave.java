@@ -3,20 +3,11 @@ package ru.practicum.shareit.item.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.practicum.shareit.request.ItemRequest;
-import ru.practicum.shareit.user.User;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class ItemDto {
+public class ItemDtoSave {
     private int id;
 
     @NotNull(message = "Поле name не может быть null")
@@ -29,10 +20,5 @@ public class ItemDto {
 
     @NotNull(message = "Поле available не может быть null")
     @NotBlank(message = "Поле available не может быть пустым")
-    private Boolean available;
-    private User owner;
-    private ItemRequest request;
-    private LocalDateTime lastBooking;
-    private LocalDateTime nextBooking;
-    private Collection<CommentDto> comments;
+    private String available;
 }
