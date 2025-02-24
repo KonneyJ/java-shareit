@@ -92,11 +92,11 @@ public class ItemServiceImpl implements ItemService {
         Collection<ItemDto> itemsDto = itemRepository.findAllByOwnerId(userId).stream().map(ItemMapper::toItemDto).toList();
         Collection<Integer> itemsId = itemsDto.stream().map(ItemDto::getId).toList();
 
-        Collection<Booking> futureBookings = bookingRepository.
-                findAllByItemIdInAndStartAfterOrderByStartDesc(itemsId, LocalDateTime.now());
+        Collection<Booking> futureBookings = bookingRepository
+                .findAllByItemIdInAndStartAfterOrderByStartDesc(itemsId, LocalDateTime.now());
 
-        Collection<Booking> pastBookings = bookingRepository.
-                findAllByItemIdInAndEndBeforeOrderByStartDesc(itemsId, LocalDateTime.now());
+        Collection<Booking> pastBookings = bookingRepository
+                .findAllByItemIdInAndEndBeforeOrderByStartDesc(itemsId, LocalDateTime.now());
 
         Collection<Comment> comments = commentRepository.findAllByItemIdIn(itemsId);
         Collection<CommentDto> commentsDto = comments.stream().map(CommentMapper::toCommentDto).toList();
@@ -149,8 +149,8 @@ public class ItemServiceImpl implements ItemService {
                 () -> new UserNotFoundException("Пользователь с id = " + userId + " не найден"));
         Item item = itemRepository.findById(itemId).orElseThrow(
                 () -> new ItemNotFoundException("Вещь с id = " + itemId + " не найдена"));
-        Booking booking = bookingRepository.
-                findByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
+        Booking booking = bookingRepository
+                .findByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
         if (booking == null) {
             throw new ConditionException("Бронирование вещи не подтверждено");
         }
