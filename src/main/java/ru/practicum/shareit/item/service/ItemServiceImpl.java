@@ -123,10 +123,8 @@ public class ItemServiceImpl implements ItemService {
                 if (commentDto.getItem().getId() == itemDto.getId()) {
                     if (commentsByItem == null) {
                         itemDto.setComments(new ArrayList<>());
-                        commentsByItem.add(commentDto);
-                    } else {
-                        commentsByItem.add(commentDto);
                     }
+                    commentsByItem.add(commentDto);
                 }
             }
             itemDto.setComments(commentsByItem);
