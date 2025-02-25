@@ -122,8 +122,12 @@ public class ItemServiceImpl implements ItemService {
             for (CommentDto commentDto : commentsDto) {
                 if (commentDto.getItem().getId() == itemDto.getId()) {
                     if (commentsByItem == null) {
-                        itemDto.setComments(new ArrayList<>());
+                        commentsByItem = new ArrayList<>();
                     }
+                    /*if (commentsByItem == null) {
+                        itemDto.setComments(new ArrayList<>());
+
+                    }*/
                     commentsByItem.add(commentDto);
                 }
             }
