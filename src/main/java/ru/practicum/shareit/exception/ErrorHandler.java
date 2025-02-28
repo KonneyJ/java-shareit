@@ -19,6 +19,12 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
+    @ExceptionHandler(BookingNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleBookingNotFoundException(BookingNotFoundException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
     @ExceptionHandler(ConditionException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleConditionException(ConditionException e) {
