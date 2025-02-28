@@ -124,10 +124,6 @@ public class ItemServiceImpl implements ItemService {
                     if (commentsByItem == null) {
                         commentsByItem = new ArrayList<>();
                     }
-                    /*if (commentsByItem == null) {
-                        itemDto.setComments(new ArrayList<>());
-
-                    }*/
                     commentsByItem.add(commentDto);
                 }
             }
