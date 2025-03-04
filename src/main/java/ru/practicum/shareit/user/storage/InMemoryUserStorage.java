@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.storage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.ConditionException;
 import ru.practicum.shareit.exception.DuplicateDataException;
 import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.user.User;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

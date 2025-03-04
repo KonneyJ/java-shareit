@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.storage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import ru.practicum.shareit.exception.ConditionException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
@@ -60,12 +60,7 @@ public class InMemoryItemStorage implements ItemStorage {
             itemFromStorage.setDescription(item.getDescription());
         }
         if (item.getAvailable() != null) {
-            if (item.getAvailable().equals("true")) {
-                itemFromStorage.setAvailable(true);
-            }
-            if (item.getAvailable().equals("false")) {
-                itemFromStorage.setAvailable(false);
-            }
+            itemFromStorage.setAvailable(item.getAvailable());
         }
         items.put(itemFromStorage.getId(), itemFromStorage);
         return itemFromStorage;
@@ -93,7 +88,7 @@ public class InMemoryItemStorage implements ItemStorage {
             return new ArrayList<>();
         } else {
             return items.values().stream()
-                    .filter(Item::isAvailable)
+                    .filter(Item::getAvailable)
                     .filter(item -> item.getName().equalsIgnoreCase(text) ||
                             item.getDescription().equalsIgnoreCase(text))
                     .toList();
