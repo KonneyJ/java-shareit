@@ -334,21 +334,6 @@ public class BookingServiceImplTest {
         assertThat(targetBookings, hasSize(sourceBookings.size()));
     }
 
-    /*@Test
-    void getAllBookingByUserItemsStateCurrentTest() {
-        UserDto user = userService.createUser(userDto);
-        int userId = user.getId();
-        ItemDto item = itemService.createItem(userId, itemSaveDto);
-        int itemId = item.getId();
-        bookingInputDto.setItemId(itemId);
-        BookingDto booking = service.createBooking(userId, bookingInputDto);
-        List<BookingDto> sourceBookings = List.of(booking);
-
-        Collection<BookingDto> targetBookings = service.getAllBookingsByUserItems(userId, BookingState.CURRENT);
-
-        assertThat(targetBookings, hasSize(sourceBookings.size()));
-    }*/
-
     @Test
     void getAllBookingByUserItemsStateFutureTest() {
         UserDto user = userService.createUser(userDto);
