@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.DuplicateDataException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
@@ -73,10 +74,38 @@ public class UserServiceImplTest {
     }
 
     @Test
+    void updateUserWithDuplicatedEmailTest() {
+        UserDto savedUser1 = service.createUser(userDto);
+        int userId1 = savedUser1.getId();
+        UserDto savedUser2 = service.createUser(userDto2);
+        int userId2 = savedUser2.getId();
+        UserDto userDto3 = new UserDto();
+        userDto3.setEmail(savedUser1.getEmail());
+
+        assertThrows(DuplicateDataException.class, () -> service.updateUser(userId1, userDto3));
+        assertThrows(DuplicateDataException.class, () -> service.updateUser(userId1, userDto2));
+    }
+
+    @Test
     void updateUserNotExistingTest() {
         int userId = userDto.getId();
 
         assertThrows(UserNotFoundException.class, () -> service.updateUser(userId, userDto2));
+    }
+
+    @Test
+    void updateUserWithNullEmailTest() {
+        UserDto savedUser = service.createUser(userDto);
+        int userId = savedUser.getId();
+        UserDto userDto3 = new UserDto();
+        userDto3.setEmail(null);
+
+        UserDto user = service.updateUser(userId, userDto3);
+
+        assertThat(user.getId(), notNullValue());
+        assertThat(user.getId(), equalTo(userId));
+        assertThat(user.getName(), equalTo(userDto.getName()));
+        assertThat(user.getEmail(), equalTo(userDto.getEmail()));
     }
 
     @Test

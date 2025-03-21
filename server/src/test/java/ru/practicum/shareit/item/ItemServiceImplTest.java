@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.exception.ConditionException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.ItemRequestNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -95,6 +96,15 @@ public class ItemServiceImplTest {
     }
 
     @Test
+    void createItemByNotExistingRequestTest() {
+        UserDto user = userService.createUser(userDto);
+        int userId = user.getId();
+        itemSaveDto.setRequestId(1);
+
+        assertThrows(ItemRequestNotFoundException.class, () -> service.createItem(userId, itemSaveDto));
+    }
+
+    @Test
     void updateItemTest() {
         UserDto user = userService.createUser(userDto);
         int userId = user.getId();
@@ -115,6 +125,14 @@ public class ItemServiceImplTest {
     }
 
     @Test
+    void updateItemByNotExistingUserTest() {
+        int userId = userDto.getId();
+        int itemId = itemDto.getId();
+
+        assertThrows(UserNotFoundException.class, () -> service.updateItem(userId, itemId, itemDto));
+    }
+
+    @Test
     void updateItemByNotExistingIdTest() {
         UserDto user = userService.createUser(userDto);
         int userId = user.getId();
@@ -124,13 +142,56 @@ public class ItemServiceImplTest {
     }
 
     @Test
+    void updateItemByOtherUserTest() {
+        UserDto user = userService.createUser(userDto);
+        int userId = user.getId();
+        ItemDto savedItem = service.createItem(userId, itemSaveDto);
+        int itemId = savedItem.getId();
+
+        UserDto userDto2 = new UserDto();
+        userDto2.setName("name");
+        userDto2.setEmail("email@yandex.ru");
+        UserDto user2 = userService.createUser(userDto2);
+        int userId2 = user2.getId();
+
+        assertThrows(UserNotFoundException.class, () -> service.updateItem(userId2, itemId, itemDto));
+    }
+
+    @Test
+    void updateItemWithNullFieldsTest() {
+        UserDto user = userService.createUser(userDto);
+        int userId = user.getId();
+        ItemDto savedItem = service.createItem(userId, itemSaveDto);
+        int itemId = savedItem.getId();
+        ItemDto nullItem = new ItemDto();
+        nullItem.setName(null);
+        nullItem.setDescription(null);
+        nullItem.setAvailable(null);
+        service.updateItem(userId, itemId, nullItem);
+
+        TypedQuery<Item> query = em.createQuery("Select it from Item it where it.id = :item_id",
+                Item.class);
+        Item item = query.setParameter("item_id", itemId)
+                .getSingleResult();
+
+        assertThat(item.getId(), notNullValue());
+        assertThat(item.getId(), equalTo(itemId));
+        assertThat(item.getName(), equalTo(itemSaveDto.getName()));
+        assertThat(item.getDescription(), equalTo(itemSaveDto.getDescription()));
+        assertThat(item.getAvailable(), equalTo(itemSaveDto.getAvailable()));
+    }
+
+    @Test
     void getItemByIdTest() {
         UserDto user = userService.createUser(userDto);
         int userId = user.getId();
+        ItemDto savedItem = service.createItem(userId, itemSaveDto);
+        int itemId = savedItem.getId();
 
-        ItemDto item = service.createItem(userId, itemSaveDto);
+        ItemDto item = service.getItemById(itemId);
 
         assertThat(item.getId(), notNullValue());
+        assertThat(item.getId(), equalTo(savedItem.getId()));
         assertThat(item.getName(), equalTo(itemSaveDto.getName()));
         assertThat(item.getDescription(), equalTo(itemSaveDto.getDescription()));
         assertThat(item.getAvailable(), equalTo(itemSaveDto.getAvailable()));
@@ -193,10 +254,13 @@ public class ItemServiceImplTest {
     void searchItemsWithEmptyTextTest() {
         Collection<ItemSaveDto> sourceItems = List.of();
         String text = "";
+        String text2 = "   ";
 
-        Collection<ItemDto> targetItems = service.searchItems(text);
+        Collection<ItemDto> targetItems1 = service.searchItems(text);
+        Collection<ItemDto> targetItems2 = service.searchItems(text2);
 
-        assertThat(targetItems, hasSize(sourceItems.size()));
+        assertThat(targetItems1, hasSize(sourceItems.size()));
+        assertThat(targetItems2, hasSize(sourceItems.size()));
     }
 
     @Test

@@ -43,11 +43,17 @@ public class UserServiceImpl implements UserService {
         }
         if ((userDto.getEmail() != null) && (!user.getEmail().equals(userDto.getEmail()))) {
             if (userRepository.findByEmail(userDto.getEmail())
-                    .stream().anyMatch(u -> u.getEmail().equals(user.getEmail()))) {
-                throw new DuplicateDataException("Пользователь с email: " + user.getEmail() + " уже существует. " +
+                    .stream()
+                    .anyMatch(u -> u.getEmail().equals(userDto.getEmail()))) {
+                throw new DuplicateDataException("Пользователь с email: " + userDto.getEmail() + " уже существует. " +
                         "Обновление невозможно");
             }
             user.setEmail(userDto.getEmail());
+        } else {
+            if(userDto.getEmail() != null) {
+                throw new DuplicateDataException("Пользователь с email: " + userDto.getEmail() + " уже существует. " +
+                        "Обновление невозможно");
+            }
         }
         return userMapper.toUserDto(userRepository.save(user));
     }

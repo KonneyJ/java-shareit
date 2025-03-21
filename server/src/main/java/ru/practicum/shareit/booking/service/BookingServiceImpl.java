@@ -47,11 +47,11 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto approveBooking(int userId, int bookingId, Boolean approved) {
         log.info("Запрос на изменение бронирования по id - {}, Пользователем userId - {} и статусом - {}",
                 bookingId, userId, approved);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ForbiddenException("Пользователь с id = " + userId + " не может управлять бронированием"));
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(
                 () -> new BookingNotFoundException("Бронирование с id = " + bookingId + "не найдено"));
         log.info("Бронирование для изменения - {}", booking);
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new ForbiddenException("Пользователь с id = " + userId + " не может управлять бронированием"));
         if (userId != booking.getItem().getOwner().getId()) {
             throw new ForbiddenException("Только владелец вещи может управлять бронированием");
         }
