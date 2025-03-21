@@ -56,7 +56,7 @@ public class BookingServiceImplTest {
         itemSaveDto.setAvailable(true);
 
         bookingInputDto = new BookingInputDto();
-        bookingInputDto.setStart(LocalDateTime.now());
+        bookingInputDto.setStart(LocalDateTime.now().minusDays(1));
         bookingInputDto.setEnd(LocalDateTime.now().plusDays(1));
     }
 
