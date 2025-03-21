@@ -202,7 +202,7 @@ public class BookingServiceImplTest {
         userDto2.setName("name");
         userDto2.setEmail("email@yandex.ru");
         UserDto otherUser = userService.createUser(userDto2);
-        int userId2 =otherUser.getId();
+        int userId2 = otherUser.getId();
 
         assertThrows(ConditionException.class, () -> service.getBookingById(userId2, bookingId));
     }

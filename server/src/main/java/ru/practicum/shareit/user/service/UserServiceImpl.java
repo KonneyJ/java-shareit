@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             }
             user.setEmail(userDto.getEmail());
         } else {
-            if(userDto.getEmail() != null) {
+            if (userDto.getEmail() != null) {
                 throw new DuplicateDataException("Пользователь с email: " + userDto.getEmail() + " уже существует. " +
                         "Обновление невозможно");
             }
